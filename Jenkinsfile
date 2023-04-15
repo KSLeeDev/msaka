@@ -67,14 +67,14 @@ pipeline {
                 branch: 'main'
             sh "git config --global user.email 'jyy013@gmail.com'"
             sh "git config --global user.name 'oolr'"
-            sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' main.yml "
-	    sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' board.yml "
-	    sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' product.yml "
+            sh "sed -i 's|main:.*|main:${BUILD_NUMBER}|g' main.yml "
+	    sh "sed -i 's|board:.*|board:${BUILD_NUMBER}|g' board.yml "
+	    sh "sed -i 's|product:.*|product:${BUILD_NUMBER}|g' product.yml "
             sh "git add main.yml"
 	    sh "git add board.yml"
 	    sh "git add product.yml"
             sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'" 
-            sshagent (credentials: ['private_key']) {
+            sshagent (credentials: ['happydraw']) {
                 sh "git remote set-url origin git@github.com:oolr/msaka.git"
                 sh "git push origin main"
             }  
