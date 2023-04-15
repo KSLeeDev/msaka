@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout Application Git Branch') {
         steps {
-            git credentialsId: 'private_key',
+            git credentialsId: 'happydraw',
                 url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
                 branch: 'main'
         }
@@ -61,7 +61,7 @@ pipeline {
 	  
    stage('K8S Manifest Update') {
        steps {
-            git credentialsId: 'private_key',
+            git credentialsId: 'happydraw',
                 url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
                 branch: 'main'
             sh "git config --global user.email 'jyy013@gmail.com'"
