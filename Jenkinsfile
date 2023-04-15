@@ -75,7 +75,7 @@ pipeline {
                 sh "git remote set-url origin git@github.com:oolr/msaka.git"
                 sh "git push origin main" 
             }  
-        }
+        } 
     }
    }
   }
