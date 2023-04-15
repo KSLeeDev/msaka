@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: board
-          image: 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board:90
+          image: 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board:91
 ---
 apiVersion: v1
 kind: Service
