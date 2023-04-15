@@ -70,9 +70,7 @@ pipeline {
             sh "sed -i 's|main:.*|main:${BUILD_NUMBER}|g' main.yml "
 	    sh "sed -i 's|board:.*|board:${BUILD_NUMBER}|g' board.yml "
 	    sh "sed -i 's|product:.*|product:${BUILD_NUMBER}|g' product.yml "
-            sh "git add main.yml"
-	    sh "git add board.yml"
-	    sh "git add product.yml"
+            sh "git add ."
             sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'" 
             sshagent (credentials: ['happydraw']) {
                 sh "git remote set-url origin git@github.com:oolr/msaka.git"
