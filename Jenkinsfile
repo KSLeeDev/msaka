@@ -80,7 +80,7 @@ pipeline {
       }
       post {
         failure {
-          echo 'k8s manifest file update failure'
+          echo 'k8s manifest file update failure' 
         }
         success {
           echo 'k8s manifest file update success'  
