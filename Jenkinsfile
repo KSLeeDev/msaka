@@ -62,7 +62,7 @@ pipeline {
    stage('k8s manifest file update') {
       steps {
         git credentialsId: 'happydraw',
-            url: 'https://github.com/oolr/msaka.git',
+            url: 'https://github.com/oolr/msaka_deploy.git',
             branch: 'main'
         
         // 이미지 태그 변경 후 메인 브랜치에 푸시
@@ -75,7 +75,7 @@ pipeline {
         sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'"
         sh "git branch -M main"
         sh "git remote remove origin"
-        sh "git remote add origin git@github.com:oolr/msaka.git"
+        sh "git remote add origin git@github.com:oolr/msaka_deploy.git"
         sh "git push -u origin main"
       }
       post {
