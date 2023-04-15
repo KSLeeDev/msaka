@@ -77,7 +77,6 @@ pipeline {
         sh "git remote remove origin"
         sh "git remote add origin git@github.com:oolr/msaka.git"
         sh "git push -u origin main"
-
       }
       post {
         failure {
