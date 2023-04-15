@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main
+  template:
+    metadata:
+      labels:
+        app: main
+    spec:
+      containers:
+        - name: main
+          image: 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main
+          volumeMounts:
+            - name: mainvol
+              mountPath: /apache-tomcat-8.5.87/logs/
+      volumes:
+      - name: mainvol
+        hostPath:
+          path: /apache-tomcat-8.5.87/logs/
+          type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-svc
+spec:
+  selector:
+    app: main
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30400
+  type: NodePort
