@@ -1,6 +1,27 @@
-pipeline {
-  agent any
+pipeline { 
+	
   stages {
+    stage('Checkout Application Git Branch') {
+        steps {
+            git credentialsId: 'oolr',
+                url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
+                branch: 'main'
+        }
+        post {
+                failure {
+                  echo 'Repository clone failure !'
+                }
+                success {
+                  echo 'Repository clone success !'
+                }
+        }
+    }
+    stage('git scm update') {
+      steps {
+        git url: 'https://github.com/oolr/msaka.git', branch: 'main'
+      }
+    }
+	
    stage('docker build') {
       steps {
         sh '''
@@ -13,29 +34,50 @@ pipeline {
    stage('main img push') {
       steps {      
 	sh '''
-	docker tag main 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main
+	docker tag main 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main:${BUILD_NUMBER}
         aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main
-        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main
+        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-main:${BUILD_NUMBER}
         '''
       }
     }
    stage('product img push') {
       steps {
         sh '''
-        docker tag product 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-product
+        docker tag product 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-product:${BUILD_NUMBER}
         aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-product
-        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-product
+        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-product:${BUILD_NUMBER}
         '''
       }
     }
    stage('board img push') {
       steps {
         sh '''
-        docker tag board 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board
+        docker tag board 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board:${BUILD_NUMBER}
         aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board
-        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board
+        docker image push 582858263322.dkr.ecr.ap-northeast-2.amazonaws.com/happydraw-board:${BUILD_NUMBER}
         '''
       }
+    }
+	  
+   stage('K8S Manifest Update') {
+       steps {
+            git credentialsId: 'oolr',
+                url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
+                branch: 'main'
+            sh "git config --global user.email 'jyy013@gmail.com'"
+            sh "git config --global user.name 'oolr'"
+            sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' main.yml "
+	    sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' board.yml "
+	    sh "sed -i 's|ng:.*|ng:${BUILD_NUMBER}|g' product.yml "
+            sh "git add main.yml"
+	    sh "git add board.yml"
+	    sh "git add product.yml"
+            sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'" 
+            sshagent (credentials: ['private_key']) {
+                sh "git remote set-url origin git@github.com:oolr/msaka.git"
+                sh "git push origin main"
+            }  
+        }
     }
    }
   }
