@@ -71,11 +71,9 @@ pipeline {
 	    sh "sed -i 's|product:.*|product:${BUILD_NUMBER}|g' product.yml "
             sh "git add ."
             sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'" 
-            sshagent (credentials: ['happydraw']) {
-	      sh '''
+            sshagent (credentials: ['happydraw']) {	      
                 sh "git remote set-url origin git@github.com:oolr/msaka.git"
-                sh "git push origin main"'
-	      '''
+                sh "git push origin main"	      
             } 
         } 
     }
