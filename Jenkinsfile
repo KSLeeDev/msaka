@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout Application Git Branch') {
         steps {
-            git credentialsId: 'oolr',
+            git credentialsId: 'private_key',
                 url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
                 branch: 'main'
         }
