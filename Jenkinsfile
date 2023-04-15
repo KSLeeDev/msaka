@@ -61,7 +61,7 @@ pipeline {
 	  
    stage('k8s manifest file update') {
       steps {
-        git credentialsId: 'happydraw',
+        git credentialsId: 'happydraw2',
             url: 'https://github.com/oolr/msaka_deploy.git',
             branch: 'main'
         
