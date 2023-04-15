@@ -61,7 +61,6 @@ pipeline {
 	  
    stage('K8S Manifest Update') {
        steps {
-	 sh '''
             git credentialsId: 'happydraw',
                 url: 'https://github.com/oolr/msaka.git', /* URL변경에 따른 수정 필요 */
                 branch: 'main'
@@ -75,7 +74,6 @@ pipeline {
             sshagent (credentials: ['happydraw']) {
                 sh "git remote set-url origin git@github.com:oolr/msaka.git"
                 sh "git push origin main"
-	    '''
             } 
         } 
     }
