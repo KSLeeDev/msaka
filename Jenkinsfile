@@ -72,7 +72,7 @@ pipeline {
             sh "git add ."
             sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'" 
             sshagent (credentials: ['happydraw']) {
-                sh "git remote set-url origin https://github.com/oolr/msaka.git"
+                sh "git remote set-url origin git@github.com:oolr/msaka.git"
                 sh "git push origin main" 
             }  
         }
