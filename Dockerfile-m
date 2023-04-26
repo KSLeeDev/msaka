@@ -6,6 +6,7 @@ RUN tar -zxvf apache-tomcat-8.5.87.tar.gz
 RUN rm -rf apache-tomcat-8.5.87.tar.gz
 WORKDIR /apache-tomcat-8.5.87/webapps/ROOT
 COPY main.jsp intro.jsp qus.jsp .
+COPY main.jsp index.jsp
 COPY css css
 COPY resources/ /apache-tomcat-8.5.87/webapps/ROOT/resources/
 COPY WEB-INF WEB-INF
