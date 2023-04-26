@@ -59,34 +59,6 @@ pipeline {
       }
     }
 
-   stage('k8s manifest file update') {
-      steps {
-        git credentialsId: 'happydraw',
-            url: 'https://github.com/oolr/msaka_deploy.git',
-            branch: 'main'
-        
-        // 이미지 태그 변경 후 메인 브랜치에 푸시
-        sh "git config --global user.email jyy013@gmail.com"
-        sh "git config --global user.name oolr"
-        sh "sed -i 's|main:.*|main:${BUILD_NUMBER}|g' main.yml"
-	sh "sed -i 's|board:.*|board:${BUILD_NUMBER}|g' board.yml"
-	sh "sed -i 's|product:.*|product:${BUILD_NUMBER}|g' product.yml"
-        sh "git add ."
-        sh "git commit -m '[UPDATE] POD ${BUILD_NUMBER} image versioning'"
-        sh "git branch -M main"
-        sh "git remote remove origin"
-        sh "git remote add origin git@github.com:oolr/msaka_deploy.git"
-        sh "git push -u origin main"
-      }
-      post {
-        failure {
-          echo 'k8s manifest file update failure'
-        }
-        success {
-          echo 'k8s manifest file update success'  
-        }
-      }
-    }
-   
+
    }
 }
